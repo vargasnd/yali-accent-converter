@@ -1,0 +1,9 @@
+numpy
+soundfile
+librosa
+pydub
+streamlit
+pandas
+pyyaml
+gradio
+openai-whisper
