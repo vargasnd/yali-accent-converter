@@ -1,10 +1,10 @@
 from pathlib import Path
 import sys
-
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import FileResponse
 import shutil
 import uuid
+
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.staticfiles import StaticFiles
 
 
 # =========================
@@ -26,7 +26,18 @@ from pipeline import load_models, convert_speech
 
 
 # =========================
-# FASTAPI APP
+# OUTPUT DIRECTORY
+# =========================
+
+OUTPUT_DIR = BASE_DIR / "output" / "final"
+OUTPUT_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+# =========================
+# FASTAPI
 # =========================
 
 api = FastAPI(
@@ -37,7 +48,18 @@ api = FastAPI(
 
 
 # =========================
-# LOAD MODEL
+# STATIC OUTPUT
+# =========================
+
+api.mount(
+    "/outputs",
+    StaticFiles(directory=str(OUTPUT_DIR)),
+    name="outputs"
+)
+
+
+# =========================
+# LOAD MODELS
 # =========================
 
 print("Loading models...")
@@ -58,7 +80,7 @@ def root():
 
 
 # =========================
-# SPEECH CONVERSION
+# CONVERT AUDIO
 # =========================
 
 @api.post("/convert")
@@ -66,7 +88,14 @@ async def convert_audio(
     file: UploadFile = File(...)
 ):
 
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="Nama file tidak ditemukan."
+        )
+
     input_dir = BASE_DIR / "server" / "temp"
+
     input_dir.mkdir(
         parents=True,
         exist_ok=True
@@ -77,32 +106,46 @@ async def convert_audio(
         / f"{uuid.uuid4().hex}_{file.filename}"
     )
 
-    with open(input_path, "wb") as buffer:
-        shutil.copyfileobj(
-            file.file,
-            buffer
-        )
-
     try:
 
+        # Simpan input sementara
+        with open(input_path, "wb") as buffer:
+            shutil.copyfileobj(
+                file.file,
+                buffer
+            )
+
+        print(f"Processing: {file.filename}")
+
+        # Jalankan pipeline
         transcription, output_audio = convert_speech(
             str(input_path)
         )
 
+        output_path = Path(output_audio)
+
+        if not output_path.exists():
+            raise RuntimeError(
+                "File hasil konversi tidak ditemukan."
+            )
+
         return {
             "status": "success",
             "transcription": transcription,
-            "audio_path": output_audio
+            "audio_url": f"/outputs/{output_path.name}"
         }
 
     except Exception as e:
 
-        return {
-            "status": "error",
-            "message": str(e)
-        }
+        print("ERROR:", e)
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
     finally:
 
+        # Hapus input sementara
         if input_path.exists():
             input_path.unlink()
