@@ -1,0 +1,4 @@
+# Seed-VC dependencies
+# Install from model/seed-vc/requirements.txt on the GPU machine.
+#
+# This file is intentionally kept as a marker for the project.
