@@ -1,5 +1,14 @@
 import gradio as gr
-from pipeline import convert_speech
+
+from .pipeline import (
+    convert_speech,
+    load_models,
+    DEVICE
+)
+
+
+print("Initializing models...")
+load_models()
 
 
 def process_audio(audio, progress=gr.Progress()):
@@ -8,12 +17,10 @@ def process_audio(audio, progress=gr.Progress()):
 
     try:
         progress(0, desc="Menyiapkan audio...")
-        
         progress(0.2, desc="Mendeteksi ucapan...")
-        
-        # Whisper + Chatterbox
+
         transcription, output_audio = convert_speech(audio)
-        
+
         progress(1.0, desc="Konversi selesai.")
 
         return (
@@ -130,9 +137,9 @@ with gr.Blocks(
     )
 
     status = gr.Markdown(
-        "Siap digunakan.",
-        elem_id="status"
-    )
+    f"Siap digunakan. Device: `{DEVICE}`",
+    elem_id="status"
+)
 
     convert_button.click(
         fn=process_audio,
@@ -150,7 +157,3 @@ with gr.Blocks(
         """,
         elem_classes="footer"
     )
-
-
-if __name__ == "__main__":
-    demo.launch()

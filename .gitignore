@@ -1,34 +1,33 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-
-# Virtual environment
 .venv/
 venv/
 env/
 
-# Audio dataset
+# Environment
+.env
+
+# Large datasets / audio
 data/raw/
-data/processed/wav/
-data/processed/segments/
-data/processed/training_candidate/
+data/processed/
+data/training_candidate/
+*.wav
+*.mp3
+*.flac
 
-# Model files / checkpoints
-model/*/checkpoints/
-model/*/*.pt
-model/*/*.pth
-model/*/*.ckpt
-model/*/*.safetensors
+# Generated output
+output/
 
-# Generated audio
-output/*
-!output/.gitkeep
+# Model / checkpoints
+model/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
 
-# Temporary files
-*.tmp
+# Logs
 *.log
 
-# OS
-.DS_Store
-Thumbs.db
+# Jupyter
+.ipynb_checkpoints/
