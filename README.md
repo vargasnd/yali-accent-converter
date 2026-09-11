@@ -1,109 +1,66 @@
 # Yali Accent Converter
 
-Yali Accent Converter adalah prototype sistem konversi karakter pengucapan
-Bahasa Indonesia berdasarkan referensi suara Yali.
+Prototype aplikasi konversi karakter pengucapan Bahasa Indonesia berdasarkan referensi suara Yali. Sistem ini bukan penerjemah Bahasa Indonesia ke Bahasa Yali; bahasa dan isi ucapan tetap Bahasa Indonesia, kemudian suara dihasilkan dengan karakter pengucapan yang dipengaruhi oleh referensi suara Yali.
 
-Sistem ini tidak melakukan penerjemahan Bahasa Indonesia ke Bahasa Yali.
-Bahasa dan isi ucapan tetap dipertahankan dalam Bahasa Indonesia, sedangkan
-karakter suara dihasilkan berdasarkan referensi suara Yali.
+## Instalasi & Menjalankan
 
-## Tujuan
+Pastikan Python 3.11 dan koneksi internet tersedia.
 
-Sistem dikembangkan sebagai prototype untuk mengeksplorasi pemanfaatan
-teknologi Speech-to-Speech dan Text-to-Speech dalam menghasilkan karakter
-pengucapan yang berbeda dari suara masukan.
+    git clone <REPOSITORY_GITHUB>
+    cd yali_accent
+    python -m venv .venv
 
-## Alur Sistem
+Windows:
 
-Input suara Bahasa Indonesia
-        ↓
-Speech Recognition (Whisper)
-        ↓
-Teks Bahasa Indonesia
-        ↓
-Chatterbox TTS
-+ Referensi suara Yali
-        ↓
-Output suara dengan karakter pengucapan Yali
+    .venv\Scripts\activate
+
+Install dependency:
+
+    pip install -r requirements-local.txt
+
+Jalankan aplikasi:
+
+    python app.py
+
+Kemudian buka alamat Gradio lokal yang ditampilkan, biasanya:
+
+    http://127.0.0.1:7860
 
 ## Teknologi
 
-- Python
-- OpenAI Whisper
-- Chatterbox TTS
-- Gradio
-- PyTorch
-- CUDA
+Python, Gradio, OpenAI Whisper, Chatterbox TTS, PyTorch, dan Hugging Face Hub.
+
+## Alur Sistem
+
+    Audio Input
+        ↓
+      Whisper
+        ↓
+    Teks Bahasa Indonesia
+        ↓
+    Chatterbox TTS
+    + Referensi Suara Yali
+        ↓
+    Audio Hasil Konversi
 
 ## Model
 
-### Speech Recognition
+File model dan aset berukuran besar tidak disimpan di repository GitHub. Referensi suara Yali diambil otomatis dari Hugging Face:
 
-Whisper digunakan untuk mengubah input suara menjadi teks Bahasa Indonesia.
+vargasnd/yali-accent-model
 
-### Speech Generation
+Model Chatterbox Indonesian:
 
-Chatterbox TTS digunakan untuk menghasilkan kembali suara berdasarkan teks
-hasil transkripsi dan audio referensi Yali.
+grandhigh/Chatterbox-TTS-Indonesian
 
-Audio referensi digunakan untuk memberikan karakter gaya, prosodi, dan
-karakteristik suara pada hasil keluaran.
-
-## Dataset
-
-Audio referensi berasal dari rekaman Bahasa Yali yang diperoleh dari
-Global Recordings Network (GRN).
-
-Dataset kemudian melalui proses:
-
-1. Konversi audio ke format WAV.
-2. Resampling audio.
-3. Segmentasi audio.
-4. Pemeriksaan kualitas audio.
-5. Review manual.
-6. Pemilihan audio yang dianggap sesuai sebagai kandidat training/reference.
-
-## Evaluasi
-
-Evaluasi dilakukan menggunakan dua pendekatan:
-
-### Evaluasi Otomatis
-
-Word Error Rate (WER) digunakan untuk melihat tingkat kesesuaian isi ucapan
-antara teks referensi dan hasil konversi.
-
-### Evaluasi Subjektif
-
-Output dinilai berdasarkan:
-
-- Clarity
-- Karakter/style pengucapan
-- Naturalness
-
-Pada pengujian prototype terhadap lima kalimat, Chatterbox memperoleh:
-
-| Aspek | Rata-rata |
-|---|---:|
-| Clarity | 4.2/5 |
-| Style | 4.2/5 |
-| Naturalness | 3.8/5 |
-
-Rata-rata WER hasil konversi adalah 41.71%.
+Model Whisper juga akan diunduh otomatis saat pertama kali digunakan dan disimpan pada cache lokal.
 
 ## Catatan
 
-Sistem ini merupakan prototype dan belum ditujukan untuk menghasilkan
-aksen Yali yang autentik secara linguistik.
+NVIDIA GPU direkomendasikan untuk mempercepat inference. Aplikasi tetap dapat berjalan menggunakan CPU, tetapi proses konversi akan lebih lambat.
 
-Karakter pengucapan yang dihasilkan merupakan pendekatan berdasarkan audio
-referensi yang tersedia.
+Hasil konversi merupakan pendekatan karakter pengucapan berdasarkan referensi suara dan bukan representasi linguistik atau fonetik resmi Bahasa Yali.
 
-## Menjalankan Sistem
+## Status
 
-Aplikasi membutuhkan environment dengan GPU yang kompatibel untuk menjalankan
-model secara optimal.
-
-Jalankan:
-
-```bash
-python app/app.py
+Prototype
