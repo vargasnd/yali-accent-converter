@@ -129,6 +129,7 @@ Prototype ini memiliki beberapa keterbatasan:
 - Kualitas output dapat berbeda tergantung pada input audio.
 - Inference pada CPU membutuhkan waktu yang cukup lama.
 - Model masih merupakan hasil eksperimen prototype dan belum ditujukan untuk penggunaan produksi.
+- Model masih belum dapat mengonversi suara female/perempuan.
 
 ## Status
 
