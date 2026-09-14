@@ -1,33 +1,43 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+
+# Virtual environment
 .venv/
 venv/
 env/
 
-# Environment
+# Environment variables
 .env
+.env.*
 
-# Large datasets / audio
-data/raw/
-data/processed/
-data/training_candidate/
-*.wav
-*.mp3
-*.flac
+# IDE
+.vscode/
+.idea/
 
-# Generated output
-output/
+# Outputs / generated audio
+output/*
+!output/.gitkeep
 
-# Model / checkpoints
-model/
-*.pth
-*.pt
-*.ckpt
-*.safetensors
+# Test audio
+pagi.mp3
+pagi_5s.wav
+test_input.wav
+
+# Seed-VC downloaded checkpoints
+seed-vc/checkpoints/
+
+# Training / experiment results
+seed-vc/runs/
+
+# Hugging Face / model cache
+.cache/
+huggingface/
 
 # Logs
 *.log
 
-# Jupyter
-.ipynb_checkpoints/
+# OS
+.DS_Store
+Thumbs.db
