@@ -15,6 +15,7 @@ soundfile
 
 munch
 einops
+descript-audio-codec
 hydra-core
 omegaconf
 pyyaml
@@ -26,3 +27,6 @@ resemblyzer
 matplotlib
 pydub
 accelerate
+jiwer
+sounddevice
+python-dotenv
